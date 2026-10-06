@@ -1,5 +1,0 @@
-ZUBEIRS CALCULATOR
-
-BEST CALCULATOR EVER
-
-made for me and my friends

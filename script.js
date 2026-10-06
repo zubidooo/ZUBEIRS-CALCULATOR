@@ -1,82 +1,49 @@
 const display = document.getElementById("display");
+let timer = null;
+let startTime = 0;
+let elapsedTime = 0;
+let isRunning = false;
 
-function appendToDisplay(input){
-display.value += input;
+function start(){
+
+  if(!isRunning){
+    startTime = Date.now() - elapsedTime;
+    timer = setInterval(update, 10)
+    isRunning = true
+  }
+
 }
 
-function clearDisplay(){
-display.value = "";
-}
-function calculate(){
-  try{
-    display.value = eval(display.value);
-  }
-  catch(error){
-  display.value = "Error"
-  }
-}
+function stop(){
 
-const dotButton = document.getElementById(".");
-let clicks = 0;
-
-dotButton.onclick = function() {
-  clicks++;
-
-  appendToDisplay(".");
-
-  if (clicks === 4) {
-    window.location.href = "https://www.crazygames.com/";
-  }
-};
-
-const minusButton = document.getElementById("-")
-let minusclicks = 0;
-
-minusButton.onclick = function() {
-  minusclicks++;
-
-  appendToDisplay("-")
-
-  if (minusclicks === 5){
-    window.location.href = "https://classroom.google.com/h/st"
+  if(isRunning){
+clearInterval(timer);
+elapsedTime = Date.now() - startTime
+isRunning = false;
   }
 }
 
-const timesButton = document.getElementById("*")
-let timesclicks = 0;
-
-timesButton.onclick = function(){
-  timesclicks++;
-
-  appendToDisplay("*")
-  
-  if (timesclicks === 3){
-    window.location.href = "https://students.matteappen.se/exercises"
-  }
+function reset(){
+   clearInterval(timer);
+   startTime = 0;
+   elapsedTime = 0;
+   isRunning = false;
+   display.textContent = "00:00:00:00"
 }
 
+function update(){
+  const currentTime = Date.now();
+  elapsedTime = currentTime - startTime;
 
+  let hours =  Math.floor (elapsedTime / (1000 * 60 * 60))
+  let minutes = Math.floor(elapsedTime / (1000 * 60) % 60);
+  let seconds = Math.floor(elapsedTime / 1000 % 60);
+  let milliseconds = Math.floor(elapsedTime % 1000 / 10)
 
+  hours = String(hours).padStart (2,"0")
+  minutes = String(minutes).padStart (2,"0")
+  seconds = String(seconds).padStart (2,"0")
+  milliseconds = String(milliseconds).padStart (2,"0")
 
-//sets the start click amount to 0 and gives it a value
-
-const driButton = document.getElementById("+");
-
-
-let plusclicks = 0;
-//counter on how many times you clicked in this case its how many times you clicked +
-
-driButton.onclick = function() {
-  plusclicks++;
-
-
-//shows + on display
-  appendToDisplay("+");
-
-
-//takes you to rickroll video
-
-  if (plusclicks === 4) {
-    window.location.href = "https://youtu.be/oHg5SJYRHA0?si=8YuGzQJ5S_IxkL52";
-  }
-};
+  display.textContent = `${hours}:${minutes}:${seconds}:${milliseconds}`;
+}
